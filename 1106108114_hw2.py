@@ -1,29 +1,31 @@
+from math import ceil
+
 PRICE_WEEKDAYS_NOON_ADULTS = 468
 PRICE_WEEKDAYS_NOON_CHILDREN = 220
 
 PRICE_HOLIDAY_AND_NIGHT_ADULTS = 568
 PRICE_HOLIDAY_AND_NIGHT_CHILDREN = 250
-PRICE_HOLIDAY_AND_NIGHT_ADDITION = 0.1
+SERVICE_ADDITION = 0.1
 
 DISCOUNT_FOLD = 0.95
 def price_count(weekdays_noon_or_holiday_and_night, discount, adults, children):
     if(weekdays_noon_or_holiday_and_night==1):
-        return price_weekdays_noon(discount, adults, children)
+        return ceil(price_weekdays_noon(discount, adults, children))
     elif(weekdays_noon_or_holiday_and_night==2):
-        price_weekdays_night_or_holiday(discount, adults, children)
+        return ceil(price_weekdays_night_or_holiday(discount, adults, children))
 
 def price_weekdays_noon(discount, adults, children):
     if(discount):
-        return (discount_three_for_two(adults, children)[0] * PRICE_WEEKDAYS_NOON_ADULTS + discount_three_for_two(adults, children)[1] * PRICE_WEEKDAYS_NOON_CHILDREN) * discount_ten_people(adults, children)
+        return (discount_three_for_two(adults, children)[0] * PRICE_WEEKDAYS_NOON_ADULTS + discount_three_for_two(adults, children)[1] * PRICE_WEEKDAYS_NOON_CHILDREN) * discount_ten_people(adults, children)  * (1 + SERVICE_ADDITION)
     else:
-        return PRICE_WEEKDAYS_NOON_ADULTS * adults + PRICE_WEEKDAYS_NOON_CHILDREN * children
+        return PRICE_WEEKDAYS_NOON_ADULTS * adults + PRICE_WEEKDAYS_NOON_CHILDREN * children  * (1 + SERVICE_ADDITION)
 
 
 def price_weekdays_night_or_holiday(discount, adults, children):
     if(discount):
-        return (discount_three_for_two(adults, children)[0] * PRICE_HOLIDAY_AND_NIGHT_ADULTS + discount_three_for_two(adults, children)[1] * PRICE_HOLIDAY_AND_NIGHT_CHILDREN)  * discount_ten_people(adults, children) * (1 + PRICE_HOLIDAY_AND_NIGHT_ADDITION)
+        return (discount_three_for_two(adults, children)[0] * PRICE_HOLIDAY_AND_NIGHT_ADULTS + discount_three_for_two(adults, children)[1] * PRICE_HOLIDAY_AND_NIGHT_CHILDREN)  * discount_ten_people(adults, children) * (1 + SERVICE_ADDITION)
     else:
-        return PRICE_HOLIDAY_AND_NIGHT_ADULTS * adults + PRICE_HOLIDAY_AND_NIGHT_CHILDREN * children
+        return PRICE_HOLIDAY_AND_NIGHT_ADULTS * adults + PRICE_HOLIDAY_AND_NIGHT_CHILDREN * children  * (1 + SERVICE_ADDITION)
 
 def discount_three_for_two(adults, children):
     discount_amt = (adults + children) // 3
